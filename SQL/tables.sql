@@ -1,0 +1,48 @@
+CREATE TABLE account(
+	accId SERIAL PRIMARY KEY,
+	accLogin VARCHAR(30) UNIQUE NOT NULL,
+	accName VARCHAR(30) NOT NULL,
+	accSurname VARCHAR(30) NOT NULL,
+	accBirth DATE NOT NULL,
+	accPassword VARCHAR(50) NOT NULL,
+	accBlocked BOOLEAN NOT NULL,
+	accHash VARCHAR(180)
+);
+
+CREATE TABLE contact(
+	conFrom INT NOT NULL,
+	conTo INT NOT NULL,
+	
+	FOREIGN KEY (conFrom) REFERENCES account(accId) ON DELETE CASCADE,
+	FOREIGN KEY (conTo) REFERENCES account(accId) ON DELETE CASCADE
+);
+
+CREATE TABLE notification(
+	notId SERIAL PRIMARY KEY,
+	notReceiver INT NOT NULL,
+	notText TEXT NOT NULL,
+	notSeen BOOLEAN NOT NULL,
+	FOREIGN KEY (notReceiver) REFERENCES account(accId) ON DELETE CASCADE
+);
+
+create table msg_p(
+	mId SERIAL PRIMARY KEY,
+	mSender INT NOT NULL,
+	mReceiver INT NOT NULL,
+	mText VARCHAR(90) NOT NULL,
+	mSeen BOOLEAN NOT NULL,
+	mDate DATE NOT NULL,
+	FOREIGN KEY(mSender) REFERENCES account(accId) ON DELETE CASCADE,
+	FOREIGN KEY(mReceiver) REFERENCES account(accId) ON DELETE CASCADE
+);
+
+CREATE TABLE role(
+	roleAccount INTEGER PRIMARY KEY,
+	roleType SMALLINT NOT NULL,
+	roleComment VARCHAR(90),
+	
+	FOREIGN KEY (roleAccount) REFERENCES account(accId) ON DELETE CASCADE
+);
+
+
+
